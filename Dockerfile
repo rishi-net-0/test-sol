@@ -38,7 +38,7 @@ COPY novnc-index.html /opt/novnc/index.html
 COPY start-vnc-session.sh /usr/bin/
 RUN chmod +x /usr/bin/start-vnc-session.sh
 
-USER codespace
+USER vscode
 
 # This is a bit of a hack. At the moment we have no means of starting background
 # tasks from a Dockerfile. This workaround checks, on each bashrc eval, if the X
