@@ -2,7 +2,10 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.238.0/containers/codespaces-linux
 {
 	"name": "GitHub Codespaces (Default) with VNC virtual desktop",
-	"image": "ghcr.io/markpatterson27/codespaces-vnc-image:universal",
+	"build": {
+		"context": "..",
+		"dockerfile": "../Dockerfile"
+	},
 
 	// Configure tool-specific properties.
 	"customizations": {
@@ -55,6 +58,9 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [6080],
 
+	// Start the VNC session as soon as the devcontainer is ready.
+	"postStartCommand": "bash -lc '/usr/bin/start-vnc-session.sh'",
+
 	// Use 'portsAttributes' to set default properties for specific forwarded ports. More info: https://code.visualstudio.com/docs/remote/devcontainerjson-reference.
 	"portsAttributes": {
 		"6080": {
@@ -64,5 +70,5 @@
 	},
 
 	// "oryx build" will automatically install your dependencies and attempt to build your project
-	"postCreateCommand": "oryx build -p virtualenv_name=.venv --log-file /tmp/oryx-build.log --manifest-dir /tmp || echo 'Could not auto-build. Skipping.'"
 }
+

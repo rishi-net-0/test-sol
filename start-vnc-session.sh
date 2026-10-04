@@ -2,14 +2,22 @@
 
 # see https://en.wikipedia.org/wiki/Xvfb#Remote_control_over_SSH
 
-DISP=${DISPLAY:1}
+DISPLAY_NAME="${DISPLAY:-:0}"
+DISP_NUM="${DISPLAY_NAME#:}"
+DISP_NUM="${DISP_NUM:-0}"
+export DISPLAY=":${DISP_NUM}"
 
-Xvfb -screen "$DISP" "${CUSTOM_XVFB_WxHxD:=1200x800x16}" -ac -pn -noreset &
+if [ -e "/tmp/.X${DISP_NUM}-lock" ]; then
+    echo "A VNC session is already running on display :${DISP_NUM}."
+    exit 0
+fi
 
-$WINDOW_MANAGER &
+Xvfb :"${DISP_NUM}" -screen 0 "${CUSTOM_XVFB_WxHxD:=1200x800x16}" -ac -pn -noreset &
 
-VNC_PORT=$((5900 + "$DISP"))
-NOVNC_PORT=$((6080 + "$DISP"))
+${WINDOW_MANAGER} &
 
-x11vnc -localhost -shared -display :"$DISP" -forever -rfbport ${VNC_PORT} -bg -o "/tmp/x11vnc-${DISP}.log"
+VNC_PORT=$((5900 + DISP_NUM))
+NOVNC_PORT=$((6080 + DISP_NUM))
+
+x11vnc -localhost -shared -display :"${DISP_NUM}" -forever -rfbport "${VNC_PORT}" -bg -o "/tmp/x11vnc-${DISP_NUM}.log"
 cd /opt/novnc/utils && ./novnc_proxy --vnc "localhost:${VNC_PORT}" --listen "${NOVNC_PORT}" &

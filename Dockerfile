@@ -1,8 +1,9 @@
 # See here for image contents: https://github.com/microsoft/vscode-dev-containers/tree/v0.209.5/containers/codespaces-linux/.devcontainer/base.Dockerfile
-
-FROM mcr.microsoft.com/vscode/devcontainers/universal:2-focal
+FROM mcr.microsoft.com/devcontainers/base:ubuntu
 
 USER root
+
+RUN rm -f /etc/apt/sources.list.d/yarn.list || true
 
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install xvfb x11vnc openbox \
@@ -41,6 +42,6 @@ USER codespace
 
 # This is a bit of a hack. At the moment we have no means of starting background
 # tasks from a Dockerfile. This workaround checks, on each bashrc eval, if the X
-# server is running on screen 0, and if not starts Xvfb, x11vnc and novnc.
+# server is running on the active display, and if not starts Xvfb, x11vnc and novnc.
 RUN echo "export DISPLAY=:0" >> ~/.bashrc \
-    && echo "[ ! -e /tmp/.X0-lock ] && (/usr/bin/start-vnc-session.sh &> /tmp/display-\${DISPLAY}.log)" >> ~/.bashrc
+    && echo "if [ ! -e \"/tmp/.X\${DISPLAY#:}-lock\" ]; then (/usr/bin/start-vnc-session.sh &> \"/tmp/display-\${DISPLAY}.log\"); fi" >> ~/.bashrc

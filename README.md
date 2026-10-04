@@ -4,11 +4,16 @@ Custom Codespaces Docker images configured for in-browser GUI app development. T
 
 ## Using
 
+This repository includes a local Dockerfile, so the devcontainer can build from the checked-in image definition instead of pulling a remote tag.
+
 Add the following to `.devcontainer/devcontainer.json` settings file.
 
 ```json
 {
-    "image": "ghcr.io/markpatterson27/codespaces-vnc-image:universal",
+    "build": {
+        "context": "..",
+        "dockerfile": "../Dockerfile"
+    },
     "forwardPorts": [6080],
     "portsAttributes": {
         "6080": {
