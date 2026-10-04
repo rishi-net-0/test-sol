@@ -1,0 +1,8 @@
+{
+  "name": "test-sol",
+  "build": {
+    "context": "..",
+    "dockerfile": "../Dockerfile"
+  },
+  "remoteUser": "vscode"
+}
