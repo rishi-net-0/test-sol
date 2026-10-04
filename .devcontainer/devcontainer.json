@@ -59,7 +59,7 @@
 	"forwardPorts": [6080],
 
 	// Start the VNC session as soon as the devcontainer is ready.
-	"postStartCommand": "bash -lc '/usr/bin/start-vnc-session.sh'",
+	//"postStartCommand": "bash -lc '/usr/bin/start-vnc-session.sh'",
 
 	// Use 'portsAttributes' to set default properties for specific forwarded ports. More info: https://code.visualstudio.com/docs/remote/devcontainerjson-reference.
 	"portsAttributes": {
