@@ -4,5 +4,6 @@
     "context": "..",
     "dockerfile": "../Dockerfile"
   },
-  "remoteUser": "vscode"
+  "remoteUser": "vscode",
+  "forwardPorts": [6080]
 }
